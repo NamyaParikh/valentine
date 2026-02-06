@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Initial "click me ni" screen */
+        .initial-screen {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .click-me-btn {
+            font-size: 2.5rem;
+            color: white;
+            padding: 30px 60px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .click-me-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.5);
+        }
+
+        /* Valentine's animation screen */
+        .valentine-screen {
+            display: none;
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        .valentine-screen.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInDown 1s ease-out 0.5s forwards;
+        }
+
+        .name {
+            color: #FFD700;
+            font-style: italic;
+        }
+
+        .question {
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.5s forwards;
+            margin-bottom: 40px;
+        }
+
+        .buttons {
+            opacity: 0;
+            animation: fadeIn 1s ease-out 2.5s forwards;
+        }
+
+        button {
+            font-size: 1.5rem;
+            padding: 15px 40px;
+            margin: 0 15px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .no-btn {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .no-btn:hover {
+            transform: scale(0.9);
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            color: #ff6b9d;
+            animation: float 3s ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-30px) rotate(10deg);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f5576c;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .message {
+            font-size: 2rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: none;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="celebration" id="celebration"></div>
+    
+    <!-- Initial "click me ni" button -->
+    <div class="initial-screen" id="initialScreen">
+        <button class="click-me-btn" onclick="showValentine()">click me ni</button>
+    </div>
+
+    <!-- Valentine's animation -->
+    <div class="valentine-screen" id="valentineScreen">
+        <h1>Hey <span class="name">Dharvi</span>! 💕</h1>
+        <p class="question">Will you be my Valentine? 💖</p>
+        <div class="buttons" id="buttons">
+            <button class="yes-btn" onclick="sayYes()">Yes! ❤️</button>
+            <button class="no-btn" onclick="moveButton(event)">No</button>
+        </div>
+        <p class="message" id="message">Yay! You made my day! 🎉💕✨</p>
+    </div>
+
+    <script>
+        // Show Valentine's screen when "click me ni" is clicked
+        function showValentine() {
+            document.getElementById('initialScreen').style.display = 'none';
+            document.getElementById('valentineScreen').classList.add('active');
+            createHearts();
+        }
+
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.top = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            document.body.appendChild(heart);
+        }
+
+        // Create multiple hearts
+        function createHearts() {
+            for (let i = 0; i < 20; i++) {
+                createHeart();
+            }
+        }
+
+        // Move the "No" button away when hovering
+        function moveButton(event) {
+            const btn = event.target;
+            const maxX = window.innerWidth - btn.offsetWidth;
+            const maxY = window.innerHeight - btn.offsetHeight;
+            
+            btn.style.position = 'fixed';
+            btn.style.left = Math.random() * maxX + 'px';
+            btn.style.top = Math.random() * maxY + 'px';
+        }
+
+        // Celebration when clicking Yes
+        function sayYes() {
+            const buttons = document.getElementById('buttons');
+            const message = document.getElementById('message');
+            const celebration = document.getElementById('celebration');
+            
+            buttons.style.display = 'none';
+            message.style.display = 'block';
+            
+            // Create confetti
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = ['#ff6b9d', '#f5576c', '#FFD700', '#667eea'][Math.floor(Math.random() * 4)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    celebration.appendChild(confetti);
+                }, i * 20);
+            }
+            
+            // Add more hearts
+            for (let i = 0; i < 30; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
